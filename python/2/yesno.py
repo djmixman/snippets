@@ -1,32 +1,37 @@
-def YNQ(question, default="quit"):
-    """Ask a yes/no/quit question via raw_input() and return their answer.
-    "question" is a string that is presented to the user.
-    "default" is the presumed answer if the user just hits <Enter>.
-        It must be "yes" (the default), "no", "quit" or None (meaning
-        an answer is required of the user).
+import sys
 
-    The "answer" return value is one of "yes", "no" or "quit".
+def YNQ(question, default="retry"):
     """
-    valid = {"yes":"yes",   "y":"yes",    "ye":"yes",
-             "no":"no",     "n":"no",
-             "quit":"quit", "qui":"quit", "qu":"quit", "q":"quit"}
-    if default == None:
-        prompt = " [y/n/q] "
-    elif default == "yes":
-        prompt = " [Y/n/q] "
-    elif default == "no":
-        prompt = " [y/N/q] "
-    elif default == "quit":
-        prompt = " [y/n/Q] "
-    else:
-        raise ValueError("invalid default answer: '%s'" % default)
+    Ask a yes/no/retry/quit question via raw_input() and return their answer.
+
+    "question"    = a string that is presented to the user.
+    "default"     = is the presumed answer if the user just hits <Enter>.
+                    By default the script will retry and can be any one of the following;
+                    "yes", "no", "retry", "quit", or None.
+
+    script will return an int with the following values;
+        retry =  2
+        yes   =  1
+        no    =  0
+        quit  = -1
+    """
+    valid = {
+      'retry': 2,  'retr': 2,  'ret': 2, 're':2, 'r':2,
+      'yes'  : 1,  'ye'  : 1,  'y'  : 1,
+      'no'   : 0,  'n'   : 0,
+      'quit' :-1,  'qui' :-1,  'qu' :-1,  'q':-1
+    }
+
+    if   default == None    : prompt = ' [y/n/r/q]: '
+    elif default == "yes"   : prompt = ' [Y/n/r/q]: '
+    elif default == "no"    : prompt = ' [y/N/r/q]: '
+    elif default == "retry" : prompt = ' [y/n/R/q]: '
+    elif default == "quit"  : prompt = ' [y/n/r/Q]: '
+    else: raise ValueError("invalid default answer: '%s'" % default)
 
     while 1:
         sys.stdout.write(question + prompt)
-        choice = raw_input().lower()
-        if default is not None and choice == '':
-            return default
-        elif choice in valid.keys():
-            return valid[choice]
-        else:
-            sys.stdout.write("Please respond with 'yes', 'no' or 'quit'.\n")
+        choice      = raw_input().lower()
+        if default is not None and choice == '': return default
+        elif choice in valid.keys(): return valid[choice]
+        else: sys.stdout.write("Invalid Response. Please use 'yes', 'no', 'retry' or 'quit'.\n")
